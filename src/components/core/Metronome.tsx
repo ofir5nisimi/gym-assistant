@@ -3,7 +3,7 @@ import './Metronome.css';
 
 export default function Metronome() {
   const [isPlaying, setIsPlaying] = useState(false);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const intervalRef = useRef<number | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
 
   // Initialize AudioContext

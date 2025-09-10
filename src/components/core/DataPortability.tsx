@@ -74,9 +74,6 @@ export default function DataPortability() {
         }
       }
 
-      // Import data using Zustand store actions
-      const store = useWorkoutStore.getState();
-      
       // Clear existing data and import new data
       // Since we don't have a direct "replace all" action, we'll use the persist mechanism
       localStorage.setItem('workout-storage', JSON.stringify({
