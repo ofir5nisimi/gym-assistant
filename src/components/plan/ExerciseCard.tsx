@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import type { Exercise } from './ExerciseRow';
 import ExerciseAutocomplete from './ExerciseAutocomplete';
-import PlateCalculator from '../core/PlateCalculator';
 
 interface ExerciseCardProps {
   exercise: Exercise;
@@ -12,7 +11,6 @@ interface ExerciseCardProps {
 export default function ExerciseCard({ exercise, onRemove, onUpdate }: ExerciseCardProps) {
   const [editingField, setEditingField] = useState<keyof Exercise | null>(null);
   const [tempValue, setTempValue] = useState<string>('');
-  const [showPlateCalculator, setShowPlateCalculator] = useState(false);
 
   const handleFieldClick = (field: keyof Exercise) => {
     if (field === 'id') return;
@@ -128,26 +126,9 @@ export default function ExerciseCard({ exercise, onRemove, onUpdate }: ExerciseC
           <div className="mobile-stat-label">Weight (kg)</div>
           <div className="mobile-stat-value">
             {renderMobileField('weight', exercise.weight, '0')}
-            {exercise.weight > 0 && (
-              <button 
-                onClick={() => setShowPlateCalculator(true)}
-                className="mobile-calculator-btn"
-                title="Plate Calculator"
-                aria-label="Open plate calculator"
-              >
-                🧮
-              </button>
-            )}
           </div>
         </div>
       </div>
-      
-      <PlateCalculator
-        targetWeight={exercise.weight}
-        isOpen={showPlateCalculator}
-        onClose={() => setShowPlateCalculator(false)}
-        onWeightChange={(weight) => onUpdate(exercise.id, 'weight', weight)}
-      />
     </div>
   );
 }

@@ -8,7 +8,6 @@ interface Exercise {
 
 import { useState } from 'react';
 import ExerciseAutocomplete from './ExerciseAutocomplete';
-import PlateCalculator from '../core/PlateCalculator';
 
 interface ExerciseRowProps {
   exercise: Exercise;
@@ -19,7 +18,6 @@ interface ExerciseRowProps {
 export default function ExerciseRow({ exercise, onRemove, onUpdate }: ExerciseRowProps) {
   const [editingField, setEditingField] = useState<keyof Exercise | null>(null);
   const [tempValue, setTempValue] = useState<string>('');
-  const [showPlateCalculator, setShowPlateCalculator] = useState(false);
 
   const handleCellClick = (field: keyof Exercise) => {
     if (field === 'id') return; // Don't allow editing ID
@@ -101,43 +99,22 @@ export default function ExerciseRow({ exercise, onRemove, onUpdate }: ExerciseRo
   };
 
   return (
-    <>
-      <tr>
-        <td>{renderCell('name', exercise.name)}</td>
-        <td>{renderCell('sets', exercise.sets)}</td>
-        <td>{renderCell('reps', exercise.reps)}</td>
-        <td className="weight-cell">
-          {renderCell('weight', exercise.weight)}
-          {exercise.weight > 0 && (
-            <button 
-              onClick={() => setShowPlateCalculator(true)}
-              className="calculator-btn"
-              title="Plate Calculator"
-              aria-label="Open plate calculator"
-            >
-              🧮
-            </button>
-          )}
-        </td>
-        <td>
-          <button 
-            onClick={() => onRemove(exercise.id)}
-            className="remove-btn"
-            title="Remove exercise"
-            aria-label={`Remove ${exercise.name || 'exercise'}`}
-          >
-            🗑️
-          </button>
-        </td>
-      </tr>
-      
-      <PlateCalculator
-        targetWeight={exercise.weight}
-        isOpen={showPlateCalculator}
-        onClose={() => setShowPlateCalculator(false)}
-        onWeightChange={(weight) => onUpdate(exercise.id, 'weight', weight)}
-      />
-    </>
+    <tr>
+      <td>{renderCell('name', exercise.name)}</td>
+      <td>{renderCell('sets', exercise.sets)}</td>
+      <td>{renderCell('reps', exercise.reps)}</td>
+      <td>{renderCell('weight', exercise.weight)}</td>
+      <td>
+        <button 
+          onClick={() => onRemove(exercise.id)}
+          className="remove-btn"
+          title="Remove exercise"
+          aria-label={`Remove ${exercise.name || 'exercise'}`}
+        >
+          🗑️
+        </button>
+      </td>
+    </tr>
   );
 }
 

@@ -4,8 +4,8 @@ import './Metronome.css';
 export default function Metronome() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isAdvancedMode, setIsAdvancedMode] = useState(false);
-  const [tempo, setTempo] = useState({ eccentric: 2, pause1: 1, concentric: 4, pause2: 1 });
-  const [currentPhase, setCurrentPhase] = useState(0); // 0=eccentric, 1=pause1, 2=concentric, 3=pause2
+  const [tempo, setTempo] = useState({ eccentric: 2, concentric: 4 });
+  const [currentPhase, setCurrentPhase] = useState(0); // 0=eccentric, 1=concentric
   const [phaseProgress, setPhaseProgress] = useState(0);
   const intervalRef = useRef<number | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
@@ -59,7 +59,7 @@ export default function Metronome() {
     // Different frequencies for different phases in advanced mode
     let frequency = 1000; // Default frequency
     if (isAdvancedMode && phase !== undefined) {
-      const frequencies = [600, 400, 800, 400]; // eccentric, pause1, concentric, pause2
+      const frequencies = [600, 800]; // eccentric, concentric
       frequency = frequencies[phase] || 1000;
     }
 
@@ -105,9 +105,20 @@ export default function Metronome() {
   };
 
   const startAdvancedTempo = () => {
-    const phases = [tempo.eccentric, tempo.pause1, tempo.concentric, tempo.pause2];
-    let currentPhaseIndex = 0;
-    let currentCount = 0;
+    const phases = [tempo.eccentric, tempo.concentric];
+    
+    // Check if all phases are zero - fallback to basic mode
+    const hasNonZeroPhase = phases.some(phase => phase > 0);
+    if (!hasNonZeroPhase) {
+      startBasicTempo();
+      return;
+    }
+    
+    let currentPhaseIndex = 0; // Start with eccentric
+    let currentCount = 1; // Start counting from 1
+    
+    setCurrentPhase(currentPhaseIndex);
+    setPhaseProgress(1); // Show 1 initially
     
     // Play first tick immediately
     playTick(currentPhaseIndex);
@@ -116,12 +127,12 @@ export default function Metronome() {
       currentCount++;
       setPhaseProgress(currentCount);
       
-      if (currentCount >= phases[currentPhaseIndex]) {
-        // Move to next phase
-        currentPhaseIndex = (currentPhaseIndex + 1) % phases.length;
-        currentCount = 0;
+      if (currentCount > phases[currentPhaseIndex]) {
+        // Switch between eccentric (0) and concentric (1)
+        currentPhaseIndex = currentPhaseIndex === 0 ? 1 : 0;
+        currentCount = 1; // Reset to 1 for next phase
         setCurrentPhase(currentPhaseIndex);
-        setPhaseProgress(0);
+        setPhaseProgress(1); // Start next phase at 1
       }
       
       playTick(currentPhaseIndex);
@@ -154,8 +165,8 @@ export default function Metronome() {
     };
   }, []);
 
-  const phaseNames = ['Eccentric', 'Pause', 'Concentric', 'Pause'];
-  const phaseColors = ['#dc3545', '#6c757d', '#28a745', '#6c757d'];
+  const phaseNames = ['Eccentric', 'Concentric'];
+  const phaseColors = ['#dc3545', '#28a745'];
 
   return (
     <div className="metronome">
@@ -202,16 +213,6 @@ export default function Metronome() {
               />
             </div>
             <div className="tempo-input-group">
-              <label>Pause:</label>
-              <input 
-                type="number" 
-                min="0" 
-                max="5" 
-                value={tempo.pause1}
-                onChange={(e) => setTempo({...tempo, pause1: parseInt(e.target.value) || 0})}
-              />
-            </div>
-            <div className="tempo-input-group">
               <label>Concentric:</label>
               <input 
                 type="number" 
@@ -221,19 +222,9 @@ export default function Metronome() {
                 onChange={(e) => setTempo({...tempo, concentric: parseInt(e.target.value) || 1})}
               />
             </div>
-            <div className="tempo-input-group">
-              <label>Pause:</label>
-              <input 
-                type="number" 
-                min="0" 
-                max="5" 
-                value={tempo.pause2}
-                onChange={(e) => setTempo({...tempo, pause2: parseInt(e.target.value) || 0})}
-              />
-            </div>
           </div>
           <div className="tempo-preview">
-            Pattern: {tempo.eccentric}-{tempo.pause1}-{tempo.concentric}-{tempo.pause2}
+            Pattern: {tempo.eccentric}E-{tempo.concentric}C
           </div>
         </div>
       )}
@@ -251,7 +242,7 @@ export default function Metronome() {
                 </span>
               </div>
               <div className="phase-progress">
-                {phaseProgress}/{[tempo.eccentric, tempo.pause1, tempo.concentric, tempo.pause2][currentPhase]}
+                {phaseProgress}/{[tempo.eccentric, tempo.concentric][currentPhase]}
               </div>
             </div>
           ) : (
