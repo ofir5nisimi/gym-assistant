@@ -7,6 +7,19 @@
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 1rem;
+  min-width: 200px;
+}
+
+.metronome-header {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .metronome-btn {
@@ -69,17 +82,127 @@
   }
 }
 
+/* Advanced Tempo Controls */
+.mode-toggle {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 0.5rem 0.75rem;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.mode-toggle.advanced {
+  background-color: #17a2b8;
+}
+
+.mode-toggle:hover {
+  transform: translateY(-1px);
+}
+
+.tempo-controls {
+  width: 100%;
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.tempo-controls h4 {
+  margin: 0 0 1rem 0;
+  color: #495057;
+  font-size: 1rem;
+}
+
+.tempo-inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.tempo-input-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.tempo-input-group label {
+  font-size: 0.8rem;
+  color: #6c757d;
+  font-weight: 600;
+}
+
+.tempo-input-group input {
+  width: 60px;
+  padding: 0.25rem;
+  border: 2px solid #dee2e6;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.tempo-input-group input:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.tempo-preview {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  padding: 0.5rem;
+  font-family: monospace;
+  font-weight: 600;
+  color: #495057;
+}
+
+.advanced-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.current-phase {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.phase-progress {
+  font-size: 0.8rem;
+  color: #6c757d;
+  font-family: monospace;
+}
+
 /* Responsive design for smaller screens */
 @media (max-width: 768px) {
   .metronome {
     position: static;
     margin: 1rem auto;
     width: fit-content;
+    min-width: 280px;
   }
   
   .metronome-btn {
     font-size: 0.8rem;
     padding: 0.6rem 0.8rem;
     min-width: 120px;
+  }
+  
+  .mode-toggle {
+    font-size: 0.7rem;
+    padding: 0.4rem 0.6rem;
+  }
+  
+  .tempo-inputs {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+  
+  .tempo-input-group input {
+    width: 50px;
   }
 }

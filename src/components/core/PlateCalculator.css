@@ -1,0 +1,267 @@
+.plate-calculator-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 1rem;
+}
+
+.plate-calculator-modal {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  max-width: 500px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.plate-calculator-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.plate-calculator-header h3 {
+  margin: 0;
+  color: #495057;
+  font-size: 1.3rem;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #6c757d;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.close-btn:hover {
+  background-color: #f8f9fa;
+}
+
+.plate-calculator-content {
+  padding: 1.5rem;
+}
+
+.weight-input-section {
+  margin-bottom: 1.5rem;
+}
+
+.weight-input-section label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #495057;
+}
+
+.weight-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #dee2e6;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  text-align: center;
+}
+
+.weight-input:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.calculation-results {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.result-summary {
+  text-align: center;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+.weight-diff {
+  color: #6c757d;
+  font-size: 0.9rem;
+  margin-left: 0.5rem;
+}
+
+.plates-per-side h4 {
+  margin: 0 0 1rem 0;
+  color: #495057;
+  font-size: 1rem;
+}
+
+.plate-visualization {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.plate-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.plate-visual {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 0.8rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  border: 3px solid rgba(255, 255, 255, 0.3);
+}
+
+.plate-count {
+  font-size: 0.9rem;
+  color: #495057;
+  font-weight: 600;
+}
+
+.impossible-weight {
+  text-align: center;
+  color: #dc3545;
+  font-size: 1.1rem;
+  padding: 1rem;
+}
+
+.settings-section {
+  border-top: 1px solid #dee2e6;
+  padding-top: 1rem;
+}
+
+.settings-toggle {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+}
+
+.settings-toggle:hover {
+  background-color: #5a6268;
+}
+
+.settings-panel {
+  margin-top: 1rem;
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 6px;
+}
+
+.barbell-setting {
+  margin-bottom: 1rem;
+}
+
+.barbell-setting label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #495057;
+}
+
+.barbell-input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+}
+
+.plates-setting h4 {
+  margin: 0 0 0.5rem 0;
+  color: #495057;
+}
+
+.plate-setting {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.plate-weight {
+  min-width: 60px;
+  font-weight: 600;
+  color: #495057;
+}
+
+.plate-count-input {
+  width: 60px;
+  padding: 0.25rem;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.plate-label {
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+.save-settings-btn {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  margin-top: 1rem;
+  transition: background-color 0.2s;
+}
+
+.save-settings-btn:hover {
+  background-color: #218838;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .plate-calculator-modal {
+    margin: 0.5rem;
+    max-height: 90vh;
+  }
+  
+  .plate-calculator-header,
+  .plate-calculator-content {
+    padding: 1rem;
+  }
+  
+  .plate-visual {
+    width: 50px;
+    height: 50px;
+    font-size: 0.7rem;
+  }
+  
+  .plate-visualization {
+    gap: 0.5rem;
+  }
+}
