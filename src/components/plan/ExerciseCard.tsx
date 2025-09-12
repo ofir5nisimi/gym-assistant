@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Exercise } from './ExerciseRow';
+import ExerciseAutocomplete from './ExerciseAutocomplete';
 
 interface ExerciseCardProps {
   exercise: Exercise;
@@ -42,19 +43,32 @@ export default function ExerciseCard({ exercise, onRemove, onUpdate }: ExerciseC
 
   const renderMobileField = (field: keyof Exercise, value: string | number, placeholder: string) => {
     if (editingField === field) {
-      return (
-        <input
-          type={field === 'name' ? 'text' : 'number'}
-          value={tempValue}
-          onChange={(e) => setTempValue(e.target.value)}
-          onBlur={handleInputBlur}
-          onKeyDown={handleInputKeyDown}
-          autoFocus
-          className="mobile-input"
-          step={field === 'weight' ? '0.5' : '1'}
-          placeholder={placeholder}
-        />
-      );
+      if (field === 'name') {
+        return (
+          <ExerciseAutocomplete
+            value={tempValue}
+            onChange={setTempValue}
+            onBlur={handleInputBlur}
+            autoFocus
+            placeholder={placeholder}
+            className="mobile-input"
+          />
+        );
+      } else {
+        return (
+          <input
+            type="number"
+            value={tempValue}
+            onChange={(e) => setTempValue(e.target.value)}
+            onBlur={handleInputBlur}
+            onKeyDown={handleInputKeyDown}
+            autoFocus
+            className="mobile-input"
+            step={field === 'weight' ? '0.5' : '1'}
+            placeholder={placeholder}
+          />
+        );
+      }
     }
     
     return (

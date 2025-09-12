@@ -7,6 +7,7 @@ interface Exercise {
 }
 
 import { useState } from 'react';
+import ExerciseAutocomplete from './ExerciseAutocomplete';
 
 interface ExerciseRowProps {
   exercise: Exercise;
@@ -50,18 +51,31 @@ export default function ExerciseRow({ exercise, onRemove, onUpdate }: ExerciseRo
 
   const renderCell = (field: keyof Exercise, value: string | number) => {
     if (editingField === field) {
-      return (
-        <input
-          type={field === 'name' ? 'text' : 'number'}
-          value={tempValue}
-          onChange={(e) => setTempValue(e.target.value)}
-          onBlur={handleInputBlur}
-          onKeyDown={handleInputKeyDown}
-          autoFocus
-          className="cell-input"
-          step={field === 'weight' ? '0.5' : '1'}
-        />
-      );
+      if (field === 'name') {
+        return (
+          <ExerciseAutocomplete
+            value={tempValue}
+            onChange={setTempValue}
+            onBlur={handleInputBlur}
+            autoFocus
+            placeholder="Exercise name"
+            className="cell-input"
+          />
+        );
+      } else {
+        return (
+          <input
+            type="number"
+            value={tempValue}
+            onChange={(e) => setTempValue(e.target.value)}
+            onBlur={handleInputBlur}
+            onKeyDown={handleInputKeyDown}
+            autoFocus
+            className="cell-input"
+            step={field === 'weight' ? '0.5' : '1'}
+          />
+        );
+      }
     }
     
     return (

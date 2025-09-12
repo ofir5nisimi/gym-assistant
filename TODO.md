@@ -148,3 +148,95 @@ This list breaks down the development of the Gym Assistant app into logical phas
         - [x] All interactive elements have clear focus states (e.g., outlines).
         - [x] All controls are properly labeled with `aria-label` for screen reader users where necessary.
         - [x] Color contrast ratios meet WCAG 2.1 AA standards.
+
+---
+---
+
+## **Part 2: Future Enhancements & New Features**
+
+---
+
+## Phase 6: Enhancing the Core Experience
+
+*Goal: Upgrade the core features to be more powerful and convenient.*
+
+- [ ] **6.1: Implement Exercise Library with Autocomplete**
+    - **Acceptance Criteria:**
+        - [ ] A new "Exercise Library" section is added to the app where users can add, edit, and delete from a master list of exercises.
+        - [ ] This library data is persisted in the global store.
+        - [ ] The "Exercise Name" input field in workout plans is replaced with an autocomplete component.
+        - [ ] As the user types, it suggests matching exercises from the library, preventing typos and ensuring consistency.
+
+- [ ] **6.2: Implement Plate Calculator**
+    - **Acceptance Criteria:**
+        - [ ] A calculator icon appears next to the "Weight" input field.
+        - [ ] A settings area is created where the user can define the weight plates they have available (e.g., 25kg, 20kg, 10kg, etc.) and the barbell weight.
+        - [ ] Clicking the calculator icon opens a modal that shows the optimal combination of plates to load on each side of the bar to achieve the target weight.
+
+- [ ] **6.3: Implement Advanced Tempo Controller**
+    - **Acceptance Criteria:**
+        - [ ] The simple metronome can be toggled to an "Advanced" mode.
+        - [ ] In this mode, the user can define a 4-digit tempo for an exercise (e.g., 2-1-4-1).
+        - [ ] When started, the metronome provides distinct auditory or visual cues for each phase of the lift, timed according to the specified tempo.
+
+---
+
+## Phase 7: Workout Intelligence and Progression
+
+*Goal: Transform the app from a notebook into an intelligent tracking tool.*
+
+- [ ] **7.1: Implement Historical Workout Logging**
+    - **Acceptance Criteria:**
+        - [ ] The data model is updated to store an array of `loggedWorkouts`, each with a timestamp and a record of the sets/reps/weight performed.
+        - [ ] A "Start Workout" button puts the app in a "Live Logging" mode.
+        - [ ] In this mode, the user can check off sets as they complete them and make real-time adjustments to the numbers.
+        - [ ] A "Finish Workout" button saves the session to the history log.
+
+- [ ] **7.2: Create Progress Visualization Charts**
+    - **Acceptance Criteria:**
+        - [ ] A new "Progress" page is created.
+        - [ ] The user can select an exercise from their library.
+        - [ ] The app displays a chart (using a library like Chart.js) showing the progression of weight, volume (sets*reps*weight), or estimated 1-Rep Max over time for the selected exercise, based on the workout logs.
+
+- [ ] **7.3: Implement Automatic Progressive Overload Suggestions**
+    - **Acceptance Criteria:**
+        - [ ] When viewing a workout plan, the app can optionally show a "suggested" weight for each exercise.
+        - [ ] This suggestion is calculated based on the user's performance in the last logged workout for that same exercise.
+        - [ ] The logic for suggestions (e.g., "add 2.5kg if you completed all sets/reps") is clearly defined.
+
+---
+
+## Phase 8: Active Workout Assistance
+
+*Goal: Add features that provide a guided, real-time experience in the gym.*
+
+- [ ] **8.1: Create "Live Workout" Mode with Rest Timers**
+    - **Acceptance Criteria:**
+        - [ ] The "Live Logging" mode from 7.1 is enhanced into a full-screen, focused UI.
+        - [ ] It displays only the current exercise with large, readable text.
+        - [ ] After the user checks off the final set of an exercise, a configurable rest timer automatically starts counting down.
+        - [ ] When the timer finishes, an audible alarm sounds, and the UI automatically advances to the next exercise in the plan.
+
+- [ ] **8.2: Implement Workout Templates and Program Library**
+    - **Acceptance Criteria:**
+        - [ ] The app is pre-loaded with several popular, evidence-based training programs (e.g., a basic Push/Pull/Legs split, a 5x5 program).
+        - [ ] Users can browse this library and import a program, which automatically creates the necessary workout plans for them.
+        - [ ] Users can also save one of their own custom-made plans as a reusable template.
+
+---
+
+## Phase 9: Broadening the Application Scope
+
+*Goal: Add new modules for holistic tracking and user engagement.*
+
+- [ ] **9.1: Implement Body Measurement Tracking**
+    - **Acceptance Criteria:**
+        - [ ] A new "Body Stats" section is added to the app.
+        - [ ] Users can log their body weight, body fat %, and circumference measurements (waist, chest, arms, etc.) with a timestamp.
+        - [ ] The app provides charts to visualize changes in these metrics over time, similar to the exercise progression charts.
+
+- [ ] **9.2: Implement Gamification and Achievements**
+    - **Acceptance Criteria:**
+        - [ ] A system is created to track user actions and milestones.
+        - [ ] An "Achievements" page displays badges or trophies the user has earned.
+        - [ ] The app automatically awards achievements for milestones like: hitting a new Personal Record, maintaining a consistent workout streak, or logging a certain total volume.
