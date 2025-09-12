@@ -193,12 +193,6 @@ This list breaks down the development of the Gym Assistant app into logical phas
         - [ ] The user can select an exercise from their library.
         - [ ] The app displays a chart (using a library like Chart.js) showing the progression of weight, volume (sets*reps*weight), or estimated 1-Rep Max over time for the selected exercise, based on the workout logs.
 
-- [ ] **7.3: Implement Automatic Progressive Overload Suggestions**
-    - **Acceptance Criteria:**
-        - [ ] When viewing a workout plan, the app can optionally show a "suggested" weight for each exercise.
-        - [ ] This suggestion is calculated based on the user's performance in the last logged workout for that same exercise.
-        - [ ] The logic for suggestions (e.g., "add 2.5kg if you completed all sets/reps") is clearly defined.
-
 ---
 
 ## Phase 8: Active Workout Assistance
