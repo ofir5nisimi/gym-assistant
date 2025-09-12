@@ -4,7 +4,15 @@
   "version": "1.0.0",
   "type": "module",
   "description": "A modern web application for managing workout plans and tracking exercises",
-  "keywords": ["gym", "workout", "fitness", "exercise", "tracking", "react", "typescript"],
+  "keywords": [
+    "gym",
+    "workout",
+    "fitness",
+    "exercise",
+    "tracking",
+    "react",
+    "typescript"
+  ],
   "author": "Your Name",
   "license": "MIT",
   "scripts": {
@@ -14,7 +22,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "chart.js": "^4.5.0",
     "react": "^19.1.1",
+    "react-chartjs-2": "^5.3.0",
     "react-dom": "^19.1.1",
     "zustand": "^5.0.8"
   },

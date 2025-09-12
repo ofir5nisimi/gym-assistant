@@ -179,11 +179,11 @@ This list breaks down the development of the Gym Assistant app into logical phas
         - [x] In this mode, the user can check off sets as they complete them and make real-time adjustments to the numbers.
         - [x] A "Finish Workout" button saves the session to the history log.
 
-- [ ] **7.2: Create Progress Visualization Charts**
+- [x] **7.2: Create Progress Visualization Charts**
     - **Acceptance Criteria:**
-        - [ ] A new "Progress" page is created.
-        - [ ] The user can select an exercise from their library.
-        - [ ] The app displays a chart (using a library like Chart.js) showing the progression of weight, volume (sets*reps*weight), or estimated 1-Rep Max over time for the selected exercise, based on the workout logs.
+        - [x] A new "Progress" page is created.
+        - [x] The user can select an exercise from their library.
+        - [x] The app displays a chart (using a library like Chart.js) showing the progression of weight, volume (sets*reps*weight), or estimated 1-Rep Max over time for the selected exercise, based on the workout logs.
 
 ---
 

@@ -6,6 +6,7 @@ import DataPortability from './components/core/DataPortability';
 import ToastContainer from './components/core/Toast';
 import LiveWorkout from './components/workout/LiveWorkout';
 import WorkoutHistory from './components/workout/WorkoutHistory';
+import ProgressVisualization from './components/workout/ProgressVisualization';
 import useWorkoutStore from './hooks/useWorkoutStore';
 import { useToast } from './hooks/useToast';
 import type { Exercise } from './components/plan/ExerciseRow';
@@ -24,6 +25,7 @@ function App() {
   
   const { messages, removeToast, showSuccess, showInfo } = useToast();
   const [showHistory, setShowHistory] = useState(false);
+  const [showProgress, setShowProgress] = useState(false);
   
   const exercises = getActiveExercises();
   const activePlan = getActivePlan();
@@ -91,6 +93,27 @@ function App() {
     );
   }
 
+  // If showing progress, show only the progress interface
+  if (showProgress) {
+    return (
+      <div className="app">
+        <ToastContainer messages={messages} onRemove={removeToast} />
+        
+        <header>
+          <h1>Gym Assistant</h1>
+          <button 
+            onClick={() => setShowProgress(false)}
+            className="back-btn"
+          >
+            ← Back to Planner
+          </button>
+        </header>
+
+        <ProgressVisualization />
+      </div>
+    );
+  }
+
   return (
     <div className="app">
       <DataPortability />
@@ -124,6 +147,12 @@ function App() {
                 className="history-btn"
               >
                 📊 View History
+              </button>
+              <button 
+                onClick={() => setShowProgress(true)}
+                className="progress-btn"
+              >
+                📈 Progress Charts
               </button>
             </div>
           </div>

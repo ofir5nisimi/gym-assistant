@@ -48,7 +48,7 @@ h1 {
   flex-wrap: wrap;
 }
 
-.start-workout-btn, .history-btn {
+.start-workout-btn, .history-btn, .progress-btn {
   padding: 0.75rem 1.5rem;
   border: none;
   border-radius: 8px;
@@ -85,6 +85,17 @@ h1 {
 .history-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 16px rgba(0, 123, 255, 0.4);
+}
+
+.progress-btn {
+  background: linear-gradient(135deg, #fd7e14 0%, #e83e8c 100%);
+  color: white;
+  box-shadow: 0 2px 8px rgba(253, 126, 20, 0.3);
+}
+
+.progress-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(253, 126, 20, 0.4);
 }
 
 .back-btn {
