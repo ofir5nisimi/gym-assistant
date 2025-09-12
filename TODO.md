@@ -160,15 +160,7 @@ This list breaks down the development of the Gym Assistant app into logical phas
 
 *Goal: Upgrade the core features to be more powerful and convenient.*
 
-- [x] **6.1: Implement Exercise Library with Autocomplete**
-    - **Acceptance Criteria:**
-        - [x] A new "Exercise Library" section is added to the app where users can add, edit, and delete from a master list of exercises.
-        - [x] This library data is persisted in the global store.
-        - [x] The "Exercise Name" input field in workout plans is replaced with an autocomplete component.
-        - [x] As the user types, it suggests matching exercises from the library, preventing typos and ensuring consistency.
-
-
-- [x] **6.2: Implement Advanced Tempo Controller**
+- [x] **6.1: Implement Advanced Tempo Controller**
     - **Acceptance Criteria:**
         - [x] The simple metronome can be toggled to an "Advanced" mode.
         - [x] In this mode, the user can define a 2-phase tempo for an exercise (eccentric-concentric).
