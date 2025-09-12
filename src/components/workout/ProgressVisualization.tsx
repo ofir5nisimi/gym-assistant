@@ -11,7 +11,6 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import useWorkoutStore from '../../hooks/useWorkoutStore';
-import type { WorkoutLog } from '../../hooks/useWorkoutStore';
 import './ProgressVisualization.css';
 
 // Register Chart.js components
