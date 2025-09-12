@@ -1,0 +1,274 @@
+.workout-history {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.history-header h2 {
+  margin: 0;
+  color: #495057;
+  font-size: 1.8rem;
+}
+
+.history-stats {
+  font-size: 1rem;
+  color: #6c757d;
+  font-weight: 600;
+}
+
+.total-workouts::before {
+  content: "🏋️ ";
+}
+
+.empty-history {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #6c757d;
+}
+
+.empty-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.empty-history h3 {
+  margin: 0 0 0.5rem 0;
+  color: #495057;
+}
+
+.empty-history p {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.workouts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.workout-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e9ecef;
+  overflow: hidden;
+  transition: all 0.2s;
+}
+
+.workout-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.workout-summary {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 1rem;
+  align-items: center;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.workout-summary:hover {
+  background-color: #f8f9fa;
+}
+
+.workout-main-info {
+  min-width: 0; /* Allows text truncation */
+}
+
+.workout-plan-name {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #495057;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.workout-date {
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+.workout-quick-stats {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #495057;
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  color: #6c757d;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-top: 0.25rem;
+}
+
+.expand-indicator {
+  font-size: 1.2rem;
+  color: #6c757d;
+  transition: transform 0.2s;
+}
+
+.workout-card.expanded .expand-indicator {
+  transform: rotate(0deg);
+}
+
+.workout-details {
+  padding: 0 1.5rem 1.5rem;
+  border-top: 1px solid #e9ecef;
+  background-color: #f8f9fa;
+}
+
+.workout-notes {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: white;
+  border-radius: 8px;
+  border-left: 4px solid #007bff;
+}
+
+.workout-notes h4 {
+  margin: 0 0 0.5rem 0;
+  color: #495057;
+  font-size: 1rem;
+}
+
+.workout-notes p {
+  margin: 0;
+  color: #6c757d;
+  line-height: 1.5;
+  font-style: italic;
+}
+
+.exercises-breakdown h4 {
+  margin: 0 0 1rem 0;
+  color: #495057;
+  font-size: 1rem;
+}
+
+.exercise-summary {
+  background: white;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.exercise-summary:last-child {
+  margin-bottom: 0;
+}
+
+.exercise-summary h5 {
+  margin: 0 0 0.75rem 0;
+  color: #495057;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.sets-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.set-summary {
+  display: grid;
+  grid-template-columns: 80px 1fr auto;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0.5rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.set-summary.completed {
+  background-color: #d4edda;
+  border-left: 3px solid #28a745;
+}
+
+.set-summary.skipped {
+  background-color: #f8d7da;
+  border-left: 3px solid #dc3545;
+  opacity: 0.7;
+}
+
+.set-number {
+  font-weight: 600;
+  color: #6c757d;
+}
+
+.set-details {
+  color: #495057;
+  font-weight: 500;
+}
+
+.set-status {
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.set-summary.completed .set-status {
+  color: #28a745;
+}
+
+.set-summary.skipped .set-status {
+  color: #dc3545;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .workout-history {
+    padding: 0.5rem;
+  }
+  
+  .history-header {
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+  }
+  
+  .workout-summary {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    text-align: center;
+  }
+  
+  .workout-quick-stats {
+    justify-content: center;
+  }
+  
+  .expand-indicator {
+    order: -1;
+  }
+  
+  .set-summary {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 0.25rem;
+  }
+}

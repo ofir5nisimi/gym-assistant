@@ -15,10 +15,37 @@ interface ExerciseLibraryItem {
   description?: string;
 }
 
+interface LoggedSet {
+  reps: number;
+  weight: number;
+  completed: boolean;
+}
+
+interface LoggedExercise {
+  id: string;
+  name: string;
+  sets: LoggedSet[];
+}
+
+interface WorkoutLog {
+  id: string;
+  planId: string;
+  planName: string;
+  date: string; // ISO string
+  exercises: LoggedExercise[];
+  duration?: number; // in minutes
+  notes?: string;
+}
+
 interface WorkoutState {
   plans: Plan[];
   activePlanId: string | null;
   exerciseLibrary: ExerciseLibraryItem[];
+  workoutLogs: WorkoutLog[];
+  
+  // Live workout state
+  isLiveWorkout: boolean;
+  currentWorkoutLog: WorkoutLog | null;
   
   // Plan management actions
   createPlan: (name: string) => void;
@@ -36,10 +63,17 @@ interface WorkoutState {
   removeExerciseFromLibrary: (id: string) => void;
   updateExerciseInLibrary: (id: string, updates: Partial<ExerciseLibraryItem>) => void;
   
+  // Workout logging actions
+  startWorkout: () => void;
+  finishWorkout: (notes?: string) => void;
+  cancelWorkout: () => void;
+  updateLoggedSet: (exerciseId: string, setIndex: number, updates: Partial<LoggedSet>) => void;
+  
   // Getters
   getActivePlan: () => Plan | null;
   getActiveExercises: () => Exercise[];
   searchExerciseLibrary: (query: string) => ExerciseLibraryItem[];
+  getWorkoutHistory: () => WorkoutLog[];
 }
 
 const defaultExerciseLibrary: ExerciseLibraryItem[] = [
@@ -113,6 +147,9 @@ const useWorkoutStore = create<WorkoutState>()(
       plans: defaultPlans,
       activePlanId: 'plan-1',
       exerciseLibrary: defaultExerciseLibrary,
+      workoutLogs: [],
+      isLiveWorkout: false,
+      currentWorkoutLog: null,
       
       createPlan: (name: string) => set((state) => {
         const newPlan: Plan = {
@@ -236,6 +273,81 @@ const useWorkoutStore = create<WorkoutState>()(
           exercise.category?.toLowerCase().includes(lowercaseQuery) ||
           exercise.description?.toLowerCase().includes(lowercaseQuery)
         );
+      },
+
+      // Workout logging actions
+      startWorkout: () => set((state) => {
+        const activePlan = state.plans.find(plan => plan.id === state.activePlanId);
+        if (!activePlan) return state;
+
+        const workoutLog: WorkoutLog = {
+          id: `workout-${Date.now()}`,
+          planId: activePlan.id,
+          planName: activePlan.name,
+          date: new Date().toISOString(),
+          exercises: activePlan.exercises.map(exercise => ({
+            id: exercise.id,
+            name: exercise.name,
+            sets: Array(exercise.sets).fill(null).map(() => ({
+              reps: exercise.reps,
+              weight: exercise.weight,
+              completed: false
+            }))
+          }))
+        };
+
+        return {
+          isLiveWorkout: true,
+          currentWorkoutLog: workoutLog
+        };
+      }),
+
+      finishWorkout: (notes?: string) => set((state) => {
+        if (!state.currentWorkoutLog) return state;
+
+        const finishedLog: WorkoutLog = {
+          ...state.currentWorkoutLog,
+          notes,
+          duration: Math.round((Date.now() - new Date(state.currentWorkoutLog.date).getTime()) / 60000) // minutes
+        };
+
+        return {
+          workoutLogs: [...state.workoutLogs, finishedLog],
+          isLiveWorkout: false,
+          currentWorkoutLog: null
+        };
+      }),
+
+      cancelWorkout: () => set({
+        isLiveWorkout: false,
+        currentWorkoutLog: null
+      }),
+
+      updateLoggedSet: (exerciseId: string, setIndex: number, updates: Partial<LoggedSet>) => set((state) => {
+        if (!state.currentWorkoutLog) return state;
+
+        const updatedExercises = state.currentWorkoutLog.exercises.map(exercise =>
+          exercise.id === exerciseId
+            ? {
+                ...exercise,
+                sets: exercise.sets.map((set, index) =>
+                  index === setIndex ? { ...set, ...updates } : set
+                )
+              }
+            : exercise
+        );
+
+        return {
+          currentWorkoutLog: {
+            ...state.currentWorkoutLog,
+            exercises: updatedExercises
+          }
+        };
+      }),
+
+      getWorkoutHistory: () => {
+        const state = get();
+        return state.workoutLogs.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
       }
     }),
     {
@@ -243,11 +355,12 @@ const useWorkoutStore = create<WorkoutState>()(
       partialize: (state) => ({ 
         plans: state.plans, 
         activePlanId: state.activePlanId,
-        exerciseLibrary: state.exerciseLibrary
+        exerciseLibrary: state.exerciseLibrary,
+        workoutLogs: state.workoutLogs
       }),
     }
   )
 );
 
 export default useWorkoutStore;
-export type { Plan, ExerciseLibraryItem };
+export type { Plan, ExerciseLibraryItem, WorkoutLog, LoggedExercise, LoggedSet };

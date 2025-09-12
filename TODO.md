@@ -180,12 +180,12 @@ This list breaks down the development of the Gym Assistant app into logical phas
 
 *Goal: Transform the app from a notebook into an intelligent tracking tool.*
 
-- [ ] **7.1: Implement Historical Workout Logging**
+- [x] **7.1: Implement Historical Workout Logging**
     - **Acceptance Criteria:**
-        - [ ] The data model is updated to store an array of `loggedWorkouts`, each with a timestamp and a record of the sets/reps/weight performed.
-        - [ ] A "Start Workout" button puts the app in a "Live Logging" mode.
-        - [ ] In this mode, the user can check off sets as they complete them and make real-time adjustments to the numbers.
-        - [ ] A "Finish Workout" button saves the session to the history log.
+        - [x] The data model is updated to store an array of `loggedWorkouts`, each with a timestamp and a record of the sets/reps/weight performed.
+        - [x] A "Start Workout" button puts the app in a "Live Logging" mode.
+        - [x] In this mode, the user can check off sets as they complete them and make real-time adjustments to the numbers.
+        - [x] A "Finish Workout" button saves the session to the history log.
 
 - [ ] **7.2: Create Progress Visualization Charts**
     - **Acceptance Criteria:**
