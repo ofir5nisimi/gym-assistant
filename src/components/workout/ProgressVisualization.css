@@ -2,6 +2,9 @@
   padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
+  overflow-x: hidden;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .progress-header {
@@ -33,6 +36,7 @@
   flex-direction: column;
   gap: 8px;
   min-width: 200px;
+  flex-shrink: 1;
 }
 
 .control-group label {
@@ -49,6 +53,8 @@
   background: white;
   font-size: 1rem;
   transition: border-color 0.2s ease;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .exercise-select:focus,
@@ -65,6 +71,9 @@
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   margin-bottom: 30px;
   height: 400px;
+  width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .no-data {
@@ -134,6 +143,7 @@
 @media (max-width: 768px) {
   .progress-visualization {
     padding: 16px;
+    overflow-x: hidden;
   }
   
   .progress-header h2 {
@@ -143,15 +153,19 @@
   .progress-controls {
     flex-direction: column;
     align-items: stretch;
+    gap: 16px;
   }
   
   .control-group {
     min-width: unset;
+    width: 100%;
   }
   
   .chart-container {
     padding: 16px;
     height: 300px;
+    margin-left: 0;
+    margin-right: 0;
   }
   
   .stats-grid {

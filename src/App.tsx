@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ExerciseTable from './components/plan/ExerciseTable';
 import PlanManager from './components/plan/PlanManager';
 import Metronome from './components/core/Metronome';
@@ -26,6 +26,40 @@ function App() {
   const { messages, removeToast, showSuccess, showInfo } = useToast();
   const [showHistory, setShowHistory] = useState(false);
   const [showProgress, setShowProgress] = useState(false);
+
+  // Handle browser back button (Android native back button)
+  useEffect(() => {
+    const handlePopState = (event: PopStateEvent) => {
+      const state = event.state;
+      if (state) {
+        setShowHistory(state.showHistory || false);
+        setShowProgress(state.showProgress || false);
+      } else {
+        // If no state, go back to main view
+        setShowHistory(false);
+        setShowProgress(false);
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+
+    // Set initial state
+    if (!window.history.state) {
+      window.history.replaceState({ showHistory: false, showProgress: false }, '');
+    }
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, []);
+
+  // Helper function to navigate with proper history management
+  const navigateTo = (showHistory: boolean, showProgress: boolean) => {
+    const state = { showHistory, showProgress };
+    window.history.pushState(state, '');
+    setShowHistory(showHistory);
+    setShowProgress(showProgress);
+  };
   
   const exercises = getActiveExercises();
   const activePlan = getActivePlan();
@@ -81,7 +115,7 @@ function App() {
         <header>
           <h1>Gym Assistant</h1>
           <button 
-            onClick={() => setShowHistory(false)}
+            onClick={() => navigateTo(false, false)}
             className="back-btn"
           >
             ← Back to Planner
@@ -102,7 +136,7 @@ function App() {
         <header>
           <h1>Gym Assistant</h1>
           <button 
-            onClick={() => setShowProgress(false)}
+            onClick={() => navigateTo(false, false)}
             className="back-btn"
           >
             ← Back to Planner
@@ -143,13 +177,13 @@ function App() {
                 🏋️ Start Workout
               </button>
               <button 
-                onClick={() => setShowHistory(true)}
+                onClick={() => navigateTo(true, false)}
                 className="history-btn"
               >
                 📊 View History
               </button>
               <button 
-                onClick={() => setShowProgress(true)}
+                onClick={() => navigateTo(false, true)}
                 className="progress-btn"
               >
                 📈 Progress Charts
