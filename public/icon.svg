@@ -2,29 +2,31 @@
   <!-- Background circle -->
   <circle cx="256" cy="256" r="256" fill="#1f2937"/>
   
-  <!-- Dumbbell design -->
+  <!-- Large GYM text above barbell -->
+  <text x="256" y="180" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="80" font-weight="900" letter-spacing="4px">GYM</text>
+  
+  <!-- Compact dumbbell design in center -->
   <g fill="#ffffff">
     <!-- Left weight -->
-    <rect x="80" y="200" width="60" height="112" rx="10"/>
-    <rect x="70" y="220" width="80" height="72" rx="8"/>
+    <rect x="120" y="230" width="40" height="80" rx="8"/>
+    <rect x="115" y="245" width="50" height="50" rx="6"/>
     
     <!-- Right weight -->
-    <rect x="372" y="200" width="60" height="112" rx="10"/>
-    <rect x="362" y="220" width="80" height="72" rx="8"/>
+    <rect x="352" y="230" width="40" height="80" rx="8"/>
+    <rect x="347" y="245" width="50" height="50" rx="6"/>
     
     <!-- Handle bar -->
-    <rect x="140" y="240" width="232" height="32" rx="16"/>
+    <rect x="160" y="260" width="192" height="20" rx="10"/>
     
     <!-- Center grip -->
-    <rect x="220" y="235" width="72" height="42" rx="4" fill="#6b7280"/>
+    <rect x="230" y="255" width="52" height="30" rx="3" fill="#6b7280"/>
   </g>
   
-  <!-- Accent elements -->
-  <circle cx="256" cy="150" r="8" fill="#10b981"/>
-  <circle cx="280" cy="140" r="6" fill="#3b82f6"/>
-  <circle cx="232" cy="140" r="6" fill="#f59e0b"/>
+  <!-- Accent elements around the design -->
+  <circle cx="200" cy="200" r="6" fill="#10b981"/>
+  <circle cx="312" cy="200" r="6" fill="#3b82f6"/>
+  <circle cx="256" cy="190" r="4" fill="#f59e0b"/>
   
-  <!-- Text -->
-  <text x="256" y="380" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="32" font-weight="bold">GYM</text>
-  <text x="256" y="410" text-anchor="middle" fill="#9ca3af" font-family="Arial, sans-serif" font-size="20">ASSISTANT</text>
+  <!-- Large ASSISTANT text below barbell -->
+  <text x="256" y="380" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="48" font-weight="700" letter-spacing="2px">ASSISTANT</text>
 </svg>
