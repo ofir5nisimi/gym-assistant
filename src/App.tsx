@@ -34,10 +34,20 @@ function App() {
       if (state) {
         setShowHistory(state.showHistory || false);
         setShowProgress(state.showProgress || false);
+        // If we're in live workout and back button is pressed, cancel workout
+        if (isLiveWorkout && !state.isLiveWorkout) {
+          const { cancelWorkout } = useWorkoutStore.getState();
+          cancelWorkout();
+        }
       } else {
         // If no state, go back to main view
         setShowHistory(false);
         setShowProgress(false);
+        // Also cancel live workout if active
+        if (isLiveWorkout) {
+          const { cancelWorkout } = useWorkoutStore.getState();
+          cancelWorkout();
+        }
       }
     };
 
@@ -45,17 +55,21 @@ function App() {
 
     // Set initial state
     if (!window.history.state) {
-      window.history.replaceState({ showHistory: false, showProgress: false }, '');
+      window.history.replaceState({ 
+        showHistory: false, 
+        showProgress: false, 
+        isLiveWorkout: false 
+      }, '');
     }
 
     return () => {
       window.removeEventListener('popstate', handlePopState);
     };
-  }, []);
+  }, [isLiveWorkout]);
 
   // Helper function to navigate with proper history management
-  const navigateTo = (showHistory: boolean, showProgress: boolean) => {
-    const state = { showHistory, showProgress };
+  const navigateTo = (showHistory: boolean, showProgress: boolean, isLiveWorkout: boolean = false) => {
+    const state = { showHistory, showProgress, isLiveWorkout };
     window.history.pushState(state, '');
     setShowHistory(showHistory);
     setShowProgress(showProgress);
@@ -92,6 +106,8 @@ function App() {
       showInfo('Add some exercises to your plan first!');
       return;
     }
+    // Push live workout state to history before starting
+    navigateTo(false, false, true);
     startWorkout();
     showSuccess('Workout started! Good luck! 💪');
   };
@@ -115,7 +131,7 @@ function App() {
         <header>
           <h1>Gym Assistant</h1>
           <button 
-            onClick={() => navigateTo(false, false)}
+            onClick={() => navigateTo(false, false, false)}
             className="back-btn"
           >
             ← Back to Planner
@@ -136,7 +152,7 @@ function App() {
         <header>
           <h1>Gym Assistant</h1>
           <button 
-            onClick={() => navigateTo(false, false)}
+            onClick={() => navigateTo(false, false, false)}
             className="back-btn"
           >
             ← Back to Planner
@@ -177,13 +193,13 @@ function App() {
                 🏋️ Start Workout
               </button>
               <button 
-                onClick={() => navigateTo(true, false)}
+                onClick={() => navigateTo(true, false, false)}
                 className="history-btn"
               >
                 📊 View History
               </button>
               <button 
-                onClick={() => navigateTo(false, true)}
+                onClick={() => navigateTo(false, true, false)}
                 className="progress-btn"
               >
                 📈 Progress Charts
