@@ -1,12 +1,16 @@
 import { useState, useRef, useEffect } from 'react';
 import './Metronome.css';
 
+type MetronomeMode = 'basic' | 'advanced' | 'voice';
+
 export default function Metronome() {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isAdvancedMode, setIsAdvancedMode] = useState(false);
+  const [mode, setMode] = useState<MetronomeMode>('basic');
   const [tempo, setTempo] = useState({ eccentric: 2, concentric: 4 });
+  const [voiceConfig, setVoiceConfig] = useState({ maxCycles: 8 });
   const [currentPhase, setCurrentPhase] = useState(0); // 0=eccentric, 1=concentric
   const [phaseProgress, setPhaseProgress] = useState(0);
+  const [currentCycle, setCurrentCycle] = useState(1);
   const intervalRef = useRef<number | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
 
@@ -36,7 +40,31 @@ export default function Metronome() {
         audioContextRef.current.close();
       }
     };
-  }, []);
+    }, []);
+
+  const speakNumber = (number: number) => {
+    if ('speechSynthesis' in window) {
+      // Cancel any ongoing speech
+      window.speechSynthesis.cancel();
+      
+      const utterance = new SpeechSynthesisUtterance(number.toString());
+      utterance.rate = 1.0;
+      utterance.pitch = 1.0;
+      utterance.volume = 0.8;
+      
+      // Try to use a clear, neutral voice
+      const voices = window.speechSynthesis.getVoices();
+      const englishVoice = voices.find(voice => 
+        voice.lang.startsWith('en') && !voice.name.includes('Google')
+      ) || voices[0];
+      
+      if (englishVoice) {
+        utterance.voice = englishVoice;
+      }
+      
+      window.speechSynthesis.speak(utterance);
+    }
+  };
 
   const playTick = (phase?: number) => {
     if (!audioContextRef.current) return;
@@ -56,9 +84,9 @@ export default function Metronome() {
     oscillator.connect(gainNode);
     gainNode.connect(audioContext.destination);
 
-    // Different frequencies for different phases in advanced mode
+    // Different frequencies for different phases in advanced/voice modes
     let frequency = 1000; // Default frequency
-    if (isAdvancedMode && phase !== undefined) {
+    if ((mode === 'advanced' || mode === 'voice') && phase !== undefined) {
       const frequencies = [600, 800]; // eccentric, concentric
       frequency = frequencies[phase] || 1000;
     }
@@ -86,11 +114,18 @@ export default function Metronome() {
     setIsPlaying(true);
     setCurrentPhase(0);
     setPhaseProgress(0);
+    setCurrentCycle(0); // Set to 0 for initial prep cycle
     
-    if (isAdvancedMode) {
-      startAdvancedTempo();
-    } else {
-      startBasicTempo();
+    switch (mode) {
+      case 'basic':
+        startBasicTempo();
+        break;
+      case 'advanced':
+        startAdvancedTempo();
+        break;
+      case 'voice':
+        startVoiceTempo();
+        break;
     }
   };
 
@@ -139,12 +174,84 @@ export default function Metronome() {
     }, 1000); // 1 second intervals
   };
 
+  const startVoiceTempo = () => {
+    const { maxCycles } = voiceConfig;
+    const concentricBeats = tempo.concentric;
+    
+    // Validate configuration
+    if (concentricBeats <= 0 || maxCycles <= 0) {
+      startBasicTempo();
+      return;
+    }
+    
+    let cycleNumber = 0; // Current cycle (rep) number (0 for initial, then 1+)
+    let beatInCycle = 0; // Current beat within the concentric phase (0 = voice/prep, 1+ = beeps)
+    let isInitialCycle = true; // Flag for the very first cycle after starting metronome
+    
+    setCurrentPhase(1); // Always concentric phase
+    setCurrentCycle(0); // Show 0 for initial prep cycle
+    setPhaseProgress(0); // Start at 0 for prep
+    
+    // Initial setup for the first cycle (no voice)
+    playTick(1); // Play first beep immediately for the prep cycle
+    
+    intervalRef.current = setInterval(() => {
+      beatInCycle++;
+      setPhaseProgress(beatInCycle);
+      
+      if (isInitialCycle) {
+        // During the initial prep cycle, only play beeps
+        if (beatInCycle < concentricBeats) {
+          playTick(1); // Play beep for concentric beats
+        } else if (beatInCycle === concentricBeats) {
+          // Prep cycle complete, transition to first counted cycle
+          isInitialCycle = false;
+          cycleNumber = 1;
+          setCurrentCycle(cycleNumber);
+          beatInCycle = 0; // Reset to voice/start of counted cycle
+          setPhaseProgress(0);
+          
+          // Speak the first cycle number immediately
+          speakNumber(cycleNumber);
+        } // If beatInCycle > concentricBeats, it's an extra beat for voice, handled next interval
+
+      } else { // Regular counted cycles
+        if (beatInCycle <= concentricBeats) {
+          // Play beep for concentric beats
+          playTick(1); // 1 = concentric phase
+        }
+        
+        if (beatInCycle >= concentricBeats) {
+          // Cycle complete, move to next
+          cycleNumber++;
+          
+          // Loop back to 1 if we exceed maxCycles
+          if (cycleNumber > maxCycles) {
+            cycleNumber = 1;
+          }
+          
+          setCurrentCycle(cycleNumber);
+          beatInCycle = 0; // Reset to voice/start of next cycle
+          setPhaseProgress(0);
+          
+          // Speak the next cycle number immediately
+          speakNumber(cycleNumber);
+        }
+      }
+    }, 1000); // 1 second intervals
+  };
+
   const stopMetronome = () => {
     setIsPlaying(false);
     
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
+    }
+    
+    // Cancel any ongoing speech
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
     }
   };
 
@@ -168,13 +275,45 @@ export default function Metronome() {
   const phaseNames = ['Eccentric', 'Concentric'];
   const phaseColors = ['#dc3545', '#28a745'];
 
+  const getModeTitle = () => {
+    switch (mode) {
+      case 'basic': return 'Basic Tempo (60 BPM)';
+      case 'advanced': return 'Advanced Tempo Controller';
+      case 'voice': return 'Voice Counting Metronome';
+    }
+  };
+
+  const getNextMode = (): MetronomeMode => {
+    switch (mode) {
+      case 'basic': return 'advanced';
+      case 'advanced': return 'voice';
+      case 'voice': return 'basic';
+    }
+  };
+
+  const getModeIcon = () => {
+    switch (mode) {
+      case 'basic': return '⚡';
+      case 'advanced': return '🔧';
+      case 'voice': return '🗣️';
+    }
+  };
+
+  const getModeLabel = () => {
+    switch (mode) {
+      case 'basic': return 'Basic';
+      case 'advanced': return 'Advanced';
+      case 'voice': return 'Voice';
+    }
+  };
+
   return (
     <div className="metronome">
       <div className="metronome-header">
         <button 
           onClick={toggleMetronome}
           className={`metronome-btn ${isPlaying ? 'playing' : ''}`}
-          title={isAdvancedMode ? 'Advanced Tempo Controller' : 'Basic Tempo (60 BPM)'}
+          title={getModeTitle()}
         >
           {isPlaying ? (
             <>
@@ -190,15 +329,15 @@ export default function Metronome() {
         </button>
         
         <button 
-          onClick={() => setIsAdvancedMode(!isAdvancedMode)}
-          className={`mode-toggle ${isAdvancedMode ? 'advanced' : 'basic'}`}
-          title={isAdvancedMode ? 'Switch to Basic Mode' : 'Switch to Advanced Mode'}
+          onClick={() => setMode(getNextMode())}
+          className={`mode-toggle ${mode}`}
+          title={`Switch to ${getModeLabel()} Mode`}
         >
-          {isAdvancedMode ? '🔧 Advanced' : '⚡ Basic'}
+          {getModeIcon()} {getModeLabel()}
         </button>
       </div>
 
-      {isAdvancedMode && !isPlaying && (
+      {mode === 'advanced' && !isPlaying && (
         <div className="tempo-controls">
           <h4>Tempo Pattern (seconds)</h4>
           <div className="tempo-inputs">
@@ -229,9 +368,53 @@ export default function Metronome() {
         </div>
       )}
 
+      {mode === 'voice' && !isPlaying && (
+        <div className="tempo-controls">
+          <h4>Voice Counting Metronome</h4>
+          <div className="tempo-inputs">
+            <div className="tempo-input-group">
+              <label>Concentric Beats:</label>
+              <input 
+                type="number" 
+                min="1" 
+                max="10" 
+                value={tempo.concentric}
+                onChange={(e) => setTempo({...tempo, concentric: parseInt(e.target.value) || 1})}
+              />
+            </div>
+            <div className="tempo-input-group">
+              <label>Max Cycles:</label>
+              <input 
+                type="number" 
+                min="1" 
+                max="20" 
+                value={voiceConfig.maxCycles}
+                onChange={(e) => setVoiceConfig({
+                  ...voiceConfig, 
+                  maxCycles: parseInt(e.target.value) || 1
+                })}
+              />
+            </div>
+          </div>
+          <div className="tempo-preview">
+            Pattern: Voice + {tempo.concentric} beeps × {voiceConfig.maxCycles} cycles (loops endlessly)
+          </div>
+          <div className="voice-info">
+            <div className="info-item">🗣️ Voice says cycle number</div>
+            <div className="info-item">🔊 Followed by {tempo.concentric} beeps (1 per second)</div>
+            <div className="info-item">🔄 Example: "ONE, beep, beep, beep, TWO, beep, beep, beep..."</div>
+            <div className="info-item">🔁 Loops: 1→2→...→{voiceConfig.maxCycles}→1→2→...</div>
+          </div>
+        </div>
+      )}
+
       {isPlaying && (
         <div className="tempo-indicator">
-          {isAdvancedMode ? (
+          {mode === 'basic' && (
+            <span className="bpm-text">60 BPM</span>
+          )}
+          
+          {mode === 'advanced' && (
             <div className="advanced-indicator">
               <div className="current-phase">
                 <span 
@@ -245,8 +428,24 @@ export default function Metronome() {
                 {phaseProgress}/{[tempo.eccentric, tempo.concentric][currentPhase]}
               </div>
             </div>
-          ) : (
-            <span className="bpm-text">60 BPM</span>
+          )}
+          
+          {mode === 'voice' && (
+            <div className="voice-indicator">
+              <div className="cycle-counter">
+                <span className="cycle-text">
+                  {currentCycle === 0 ? 'Prep' : `Cycle ${currentCycle}/${voiceConfig.maxCycles}`}
+                </span>
+              </div>
+              <div className="current-phase">
+                <span className="phase-name" style={{ color: phaseColors[1] }}>
+                  {phaseProgress === 0 && currentCycle !== 0 ? 'Speaking' : 'Concentric'}
+                </span>
+                <span className="phase-count">
+                  ({phaseProgress === 0 && currentCycle !== 0 ? 'Voice' : `${phaseProgress}/${tempo.concentric}`})
+                </span>
+              </div>
+            </div>
           )}
         </div>
       )}
