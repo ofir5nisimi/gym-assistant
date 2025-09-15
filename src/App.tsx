@@ -116,6 +116,7 @@ function App() {
   if (isLiveWorkout) {
     return (
       <div className="app">
+        <Metronome />
         <ToastContainer messages={messages} onRemove={removeToast} />
         <LiveWorkout />
       </div>
@@ -126,6 +127,7 @@ function App() {
   if (showHistory) {
     return (
       <div className="app">
+        <Metronome />
         <ToastContainer messages={messages} onRemove={removeToast} />
         
         <header>
@@ -147,6 +149,7 @@ function App() {
   if (showProgress) {
     return (
       <div className="app">
+        <Metronome />
         <ToastContainer messages={messages} onRemove={removeToast} />
         
         <header>
